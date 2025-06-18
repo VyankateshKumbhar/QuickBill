@@ -4,11 +4,17 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
+import ManageInventory from './components/ManageInventory'
 function App() {
   return(
     <>
+    <div>
     <Navbar/>
-    <Sidebar/>
+    <div className='flex'>
+      <Sidebar/>
+      <ManageInventory/>
+    </div>     
+    </div>
     </>
   )
 }
