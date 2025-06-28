@@ -3,10 +3,12 @@ import mongoose from 'mongoose';
 import router from './serverFolder/routes/productRoutes.js';
 import connectDB from './serverFolder/config/db.js';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
  
