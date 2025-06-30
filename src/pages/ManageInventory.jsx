@@ -4,8 +4,8 @@ import AddProduct from '../Components/AddProduct'
 import { useEffect, useState } from 'react';
 import Product from "../Components/Product"
 const ManageInventory = () => {
-  const [popup, setpopup] = useState(0);
-  const [productAdded, setProductAdded] = useState(0);
+  const [popup, setpopup] = useState(false);
+  const [productAdded, setProductAdded] = useState(false);
   const [products, setProducts] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +23,7 @@ const ManageInventory = () => {
   useEffect(() => {
     if (productAdded) {
       const timer = setTimeout(() => {
-        setProductAdded(0);
+        setProductAdded(false);
       }, 1000);
       return () => clearTimeout(timer); // clean-up
     }
@@ -39,7 +39,7 @@ const ManageInventory = () => {
             <h1 className='text-3xl font-bold'>Inventory Management</h1>
             <p>Mange your products and stock levels</p>
           </div>
-          <button onClick={() => setpopup(1)} className='bg-blue-500 text-white font-bold rounded-md 
+          <button onClick={() => setpopup(true)} className='bg-blue-500 text-white font-bold rounded-md 
                                 p-3 items-center whitespace-pre'>+   Add Product</button>
         </div>
         <input type="text" placeholder="🔍 Enter Item Name" className='mx-5 h-10 rounded-md
@@ -48,25 +48,24 @@ const ManageInventory = () => {
         <div className="bg-white m-5 rounded-md flex flex-col pb-6">
           <div className="mx-5 py-5 text-3xl ">Products (6)</div>
           {
-            products.map((details, index) => (
-              <Product key={index} details={details} />
-            ))
+            products.map((details) => {
+              return <Product key={details._id} details={details} />;
+            })
           }
 
         </div>
       </div>
 
       {popup && <AddProduct popup={popup} setpopup={setpopup}
-        productAdded={productAdded} setProductAdded={setProductAdded} />}
+        productAdded={productAdded} setProductAdded={setProductAdded} isEditMode={false} productToEdit={null}/>}
 
       {productAdded && (
-        <div className='h-auto w-full text-white flex justify-center  fixed top-5 z-50'>
+        <div className='h-auto w-screen text-white flex justify-center  fixed top-5 z-50'>
           <div className="h-auto w-auto bg-green-500 shadow-md py-2 px-4">
             Product Added Successfully!
           </div>
         </div>
       )}
-
     </>
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { useState,useEffect } from 'react'
-const AddProduct = ({ popup, setpopup, productAdded, setProductAdded }) => {
+import { useState, useEffect } from 'react'
+const AddProduct = ({ popup, setpopup, productAdded, setProductAdded, isEditMode, productToEdit }) => {
 
   const [product, setproduct] = useState({
     name: "",
@@ -16,6 +16,11 @@ const AddProduct = ({ popup, setpopup, productAdded, setProductAdded }) => {
     stock: "",
     barcode: ""
   });
+  useEffect(() => {
+    if (isEditMode && productToEdit) {
+      setproduct(productToEdit);
+    }
+  }, [isEditMode, productToEdit]);
   const handleChange = (e) => {
     setproduct({ ...product, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: "" });
@@ -23,23 +28,29 @@ const AddProduct = ({ popup, setpopup, productAdded, setProductAdded }) => {
   const handleSubmit = async () => {
     const newErrors = {
       name: product.name.trim() === "" ? "Required" : "",
-      price: product.price.trim() === "" ? "Required": isNaN(product.price) ? "Must be a number" : "",
+      price: String(product.price).trim() === "" ? "Required" : isNaN(product.price) ? "Must be a number" : "",
       category: product.category.trim() === "" ? "Required" : "",
-      stock: product.stock.trim() === "" ? "Required" : isNaN(product.stock) ? "Must be a number" : "",
+      stock: String(product.stock).trim() === "" ? "Required" : isNaN(product.stock) ? "Must be a number" : "",
       barcode: product.barcode.trim() === "" ? "Required" : ""
     };
     setErrors(newErrors);
+    const url = isEditMode ? `http://localhost:5000/api/products/${product._id}` : "http://localhost:5000/api/products"
+    const method = isEditMode ? "PUT" : "POST"
     try {
-      const res = await fetch("http://localhost:5000/api/products", {
-        method: "POST",
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(product)
+        body: JSON.stringify({
+          ...product,
+          price: Number(product.price),
+          stock: Number(product.stock),
+        })
       });
       if (res.ok) {
         const data = await res.json();
-        console.log("Product added:", data);
-        setProductAdded(1);
-        setpopup(0);
+        console.log(isEditMode ? "Updated" : "Added", data);
+        setProductAdded(true);
+        setpopup(false);
       }
     } catch (err) {
       console.error("Error", err);
@@ -51,7 +62,7 @@ const AddProduct = ({ popup, setpopup, productAdded, setProductAdded }) => {
   return (
     <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
       <div className="bg-white rounded-xl shadow-lg w-[30vw] flex flex-col items-center font-medium">
-        <div className="w-[26vw] mt-6 text-2xl">Add New Product</div>
+        <div className="w-[26vw] mt-6 text-2xl">{isEditMode?"Update The Product":"Add New Product"}</div>
         <div className="w-[26vw] mt-6">
           <div>Product Name</div>
           <input type="text" onChange={handleChange} value={product.name} name="name"
@@ -84,8 +95,9 @@ const AddProduct = ({ popup, setpopup, productAdded, setProductAdded }) => {
         </div>
         <div className="w-[26vw] my-5 flex flex-row justify-between">
           <button onClick={handleSubmit}
-            className="bg-blue-600 text-white py-2 w-[12.5vw] rounded">Add Product</button>
-          <button onClick={() => setpopup(0)}
+            className="bg-blue-600 text-white py-2 w-[12.5vw] rounded">
+            {isEditMode ? "Update" : "Add Product"}</button>
+          <button onClick={() => setpopup(false)}
             className="border-black border py-2 w-[12.5vw] rounded">Cancel</button>
         </div>
       </div>
