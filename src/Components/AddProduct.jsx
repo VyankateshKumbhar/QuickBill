@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
-const AddProduct = ({ popup, setpopup, productAdded, setProductAdded, isEditMode, productToEdit }) => {
+const AddProduct = ({ popup, setpopup, setProductAdded, isEditMode, productToEdit,  setProductEdited }) => {
 
   const [product, setproduct] = useState({
     name: "",
@@ -49,7 +49,7 @@ const AddProduct = ({ popup, setpopup, productAdded, setProductAdded, isEditMode
       if (res.ok) {
         const data = await res.json();
         console.log(isEditMode ? "Updated" : "Added", data);
-        setProductAdded(true);
+        isEditMode ? setProductEdited(true) : setProductAdded(true);
         setpopup(false);
       }
     } catch (err) {
