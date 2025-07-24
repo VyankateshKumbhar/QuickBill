@@ -19,7 +19,7 @@ router.post('/',async (req,res)=>{
 });
 router.get('/', async(req, res) => {
    try{
-      const products=await Product.find();
+      const products=await Product.find().sort({ name: 1 });
       res.json(products);
    }
    catch(err){
@@ -35,7 +35,7 @@ router.get('/:searchVal', async(req, res) => {
         { name: { $regex: searchVal, $options: 'i' } },
         { barcode: { $regex: searchVal, $options: 'i' } }
       ]
-    });
+    }).sort({ name: 1 });
       res.json(products);
    }
    catch(err){
