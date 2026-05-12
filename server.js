@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import router from './serverFolder/routes/productRoutes.js';
+import productRouter from './serverFolder/routes/productRoutes.js';
+import cartRouter from './serverFolder/routes/cartRoutes.js';
 import connectDB from './serverFolder/config/db.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -14,8 +15,8 @@ app.use(express.json());
  
 connectDB();
 
-app.use('/api/products', router);
-
+app.use('/api/products', productRouter);
+app.use('/api/cart', cartRouter);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

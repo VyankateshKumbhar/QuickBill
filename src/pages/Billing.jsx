@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react';
 import BillingProduct from '../Components/BillingProduct'
+import CartProduct from '../Components/CartProduct'
 const Billing = () => {
   const [products, setProducts] = useState([]);
   const [searchVal, setSearchVal] = useState((""));
@@ -22,7 +23,7 @@ const Billing = () => {
     fetchData();
   }, [searchVal])
   return (
-    <div className=" w-[83vw] mt-[9vh] grid grid-cols-2 h-[91vh] overflow-y-scroll ">
+    <div className=" w-[83vw] mt-[9vh] grid grid-cols-2 h-[91vh]  ">
       <div className='w-full'>
         <div className='m-5'>
           <div className='w-full flex flex-row justify-between items-center'>
@@ -33,8 +34,8 @@ const Billing = () => {
             <button className='bg-white font-semibold rounded-md 
                                 px-5 items-center h-9 flex'>View History</button>
           </div>
-          <div className="h-auto w-full bg-white mt-5 rounded-xl flex flex-col p-5 
-           ">
+          <div className="h-[74vh] w-full bg-white mt-5 rounded-xl flex flex-col p-5 
+           overflow-y-scroll">
             <h1 className="text-2xl font-semibold">Add Products</h1>
             <input type="text" placeholder="🔍 Enter Item Name"
               className='rounded-md text-gray-800 px-5 py-1 mt-4 bg-white border border-gray-300'
@@ -49,10 +50,46 @@ const Billing = () => {
       </div>
       <div className=''>
         <div className='w-full h-auto'>
-          <div className='m-5 '>
-            <div className='bg-blue-500 h-[60vh]'>Shopping Cart</div>
-            <div className='bg-yellow-500 h-[60vh]'>Shopping Cart</div>
-            <div>Bill Summary</div>
+          <div className='m-5 gap-5 flex flex-col'>
+            <div className='bg-white rounded-md p-5 h-[50vh] overflow-y-scroll'>
+              <div className=" text-2xl font-semibold mb-4">Shopping Cart (0 items)</div>
+              <CartProduct/>
+              <CartProduct/>
+              <CartProduct/>
+              <CartProduct/>
+              <CartProduct/>
+              <CartProduct/>
+            </div>
+            <div className='bg-white h-[33vh] rounded-md flex
+             flex-col justify-around p-3'>
+              <div className='text-2xl font-semibold'>Bill Summary</div>
+              <div className='flex-col'>
+                <div className='flex justify-between'>
+                  <div>Total Items</div>
+                  <div>1000</div>
+                </div>
+                <div className='flex justify-between'>
+                  <div>Subtotal</div>
+                  <div>1000</div>
+                </div>
+                <div className='flex justify-between'>
+                  <div>Discount</div>
+                  <div>500</div>
+                </div>
+                <div className='flex justify-between'>
+                  <div>GST</div>
+                  <div>250</div>
+                </div>
+              </div>
+              <div className='bg-black w-full h-0.25'></div>
+              <div className='flex flex-col gap-2 font-semibold'>
+                <div className='text-xl '>Grand Total</div>
+                <div className='flex justify-evenly'>
+                  <div className='border-2 px-20 py-0.5 rounded-md'>Clear Cart</div>
+                  <div className='border-2 px-20 py-0.5 rounded-md text-white bg-green-800'>Generate Bill</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
