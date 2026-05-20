@@ -5,6 +5,7 @@ import CartProduct from '../Components/CartProduct'
 const Billing = () => {
   const [products, setProducts] = useState([]);
   const [searchVal, setSearchVal] = useState((""));
+  const [cartItems, setCartItems] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,6 +23,7 @@ const Billing = () => {
     }
     fetchData();
   }, [searchVal])
+
   return (
     <div className=" w-[83vw] mt-[9vh] grid grid-cols-2 h-[91vh]  ">
       <div className='w-full'>
@@ -42,7 +44,12 @@ const Billing = () => {
               onChange={(e) => { setSearchVal(e.target.value) }} value={searchVal} ></input>
             <div className=' mt-5'>
               {products.map((details) => {
-                return <BillingProduct key={details._id} details={details} />;
+                return <BillingProduct
+                key={details._id} 
+                details={details} 
+                cartItems={cartItems}
+                setCartItems={setCartItems}
+              />;
               })}
             </div>
           </div>
@@ -53,12 +60,9 @@ const Billing = () => {
           <div className='m-5 gap-5 flex flex-col'>
             <div className='bg-white rounded-md p-5 h-[50vh] overflow-y-scroll'>
               <div className=" text-2xl font-semibold mb-4">Shopping Cart (0 items)</div>
-              <CartProduct/>
-              <CartProduct/>
-              <CartProduct/>
-              <CartProduct/>
-              <CartProduct/>
-              <CartProduct/>
+              {cartItems.map((details)=>{
+                return <CartProduct details={details}/>
+              })}
             </div>
             <div className='bg-white h-[33vh] rounded-md flex
              flex-col justify-around p-3'>
@@ -83,7 +87,10 @@ const Billing = () => {
               </div>
               <div className='bg-black w-full h-0.25'></div>
               <div className='flex flex-col gap-2 font-semibold'>
-                <div className='text-xl '>Grand Total</div>
+                <div className='text-xl flex justify-between'>
+                  <div>Grand Total</div>
+                  <div className='text-green-800'>₹1250</div>
+                </div>
                 <div className='flex justify-evenly'>
                   <div className='border-2 px-20 py-0.5 rounded-md'>Clear Cart</div>
                   <div className='border-2 px-20 py-0.5 rounded-md text-white bg-green-800'>Generate Bill</div>

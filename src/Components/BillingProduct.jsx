@@ -1,5 +1,5 @@
 import React from 'react'
-const BillingProduct = ({details}) => {
+const BillingProduct = ({cartItems,setCartItems,details}) => {
   if (!details) return null;
   //first add GET request to find product
   //if(productFound)Send Put Request to update the quantity
@@ -7,27 +7,23 @@ const BillingProduct = ({details}) => {
   //link thi quantity to actual stock and give popude when quantity exceeds stock
   //add i/p field for quantity in billing Product
   const handleClick = async () => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/cart`, {
-        method: 'POST',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...details,
-          barcode: Number(details.barcode),
-          quantity: 1,
-        })
-      })
-      if (res.ok) {
-        const data = await res.json();
-        console.log("Added", data);
-        setProductAdded(true);
-      }
-    } catch (err) {
-      console.error("Error", err);
+    const exist=cartItems.some((item)=>{
+      return item._id===details._id
     }
+    );
+    let updatedCart = [...cartItems];
+    if(!exist){
+      if(details.stock===0){
+        console.log(`${details.name} is out of stock`);
+        return;
+      }
+      updatedCart = [...cartItems, {...details,quantity:1}];
+      setCartItems(updatedCart);
+    }
+    updatedCart.forEach((item)=>{console.log(item.name,item.quantity)})
   };
   return (
-    <div className="flex flex-row justify-between items-center px-3 py-2 
+    <div className="flex flex-r ow justify-between items-center px-3 py-2 
                       border-b border-gray-300 hover:bg-gray-50
                       cursor-pointer" onClick={handleClick}>
                 <div>
