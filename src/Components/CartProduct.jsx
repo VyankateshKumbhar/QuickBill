@@ -2,7 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react'
-const CartProduct = ({ details }) => {
+const CartProduct = ({ details,cartItems,setCartItems }) => {
     const [Quantity, SetQuantity] = useState(1);
     useEffect(() => {
         if (details.stock < Quantity) {
@@ -10,10 +10,22 @@ const CartProduct = ({ details }) => {
             SetQuantity(details.stock);
         }
         else {
-            if (isNaN(Quantity)) details.quantity = 0;
-            else details.quantity = Quantity;
+            details.quantity = Number(Quantity || 0);
         }
     }, [Quantity])
+
+    const handleChange = (e) => {
+
+        let val = parseInt(e.target.value);
+
+        if (isNaN(val)) {
+            val="";
+        } 
+        SetQuantity(val)
+        setCartItems((prevItems)=>prevItems.map((item)=>
+            item._id===details._id ? {...item, quantity:val} : item
+        ))
+    };
     return (
         <div className="flex flex-row just justify-between border border-gray-300
                     rounded-md items-center mt-4 p-2">
@@ -25,15 +37,7 @@ const CartProduct = ({ details }) => {
                 <input className="w-[3vw]"
                     type='number'
                     value={Quantity}
-                    onChange={(e) => {
-                        const val = parseInt(e.target.value);
-
-                        if (isNaN(val)) {
-                            SetQuantity("");
-                        } else {
-                            SetQuantity(val);
-                        }
-                    }}
+                    onChange={handleChange}
                 />
                 <div className="w-[5vw] flex items-center flex-row justify-start"
                 >{details.price * Number(Quantity || 0)}</div>

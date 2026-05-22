@@ -6,6 +6,13 @@ const Billing = () => {
   const [products, setProducts] = useState([]);
   const [searchVal, setSearchVal] = useState((""));
   const [cartItems, setCartItems] = useState([]);
+ 
+    const findSubtotal=()=>{
+          const total= cartItems.reduce((sum,item)=>{
+            return sum+item.quantity*item.price
+          },0);
+          return total
+    }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,7 +68,11 @@ const Billing = () => {
             <div className='bg-white rounded-md p-5 h-[50vh] overflow-y-scroll'>
               <div className=" text-2xl font-semibold mb-4">Shopping Cart (0 items)</div>
               {cartItems.map((details)=>{
-                return <CartProduct details={details}/>
+                return <CartProduct 
+                key={details._id}
+                details={details}
+                cartItems={cartItems}
+                setCartItems={setCartItems}/>
               })}
             </div>
             <div className='bg-white h-[33vh] rounded-md flex
@@ -70,26 +81,26 @@ const Billing = () => {
               <div className='flex-col'>
                 <div className='flex justify-between'>
                   <div>Total Items</div>
-                  <div>1000</div>
+                  <div>{cartItems.length}</div>
                 </div>
                 <div className='flex justify-between'>
                   <div>Subtotal</div>
-                  <div>1000</div>
+                  <div>₹{findSubtotal()}</div>
                 </div>
                 <div className='flex justify-between'>
                   <div>Discount</div>
-                  <div>500</div>
+                  <div>00</div>
                 </div>
                 <div className='flex justify-between'>
                   <div>GST</div>
-                  <div>250</div>
+                  <div>00</div>
                 </div>
               </div>
               <div className='bg-black w-full h-0.25'></div>
               <div className='flex flex-col gap-2 font-semibold'>
                 <div className='text-xl flex justify-between'>
                   <div>Grand Total</div>
-                  <div className='text-green-800'>₹1250</div>
+                  <div className='text-green-800'>₹{findSubtotal()}</div>
                 </div>
                 <div className='flex justify-evenly'>
                   <div className='border-2 px-20 py-0.5 rounded-md'>Clear Cart</div>
