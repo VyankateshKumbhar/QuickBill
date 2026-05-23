@@ -2,11 +2,12 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import BillingProduct from '../Components/BillingProduct'
 import CartProduct from '../Components/CartProduct'
+import generateBillPDF from '../utils/GenerateBillPDF'
 const Billing = () => {
   const [products, setProducts] = useState([]);
   const [searchVal, setSearchVal] = useState((""));
   const [cartItems, setCartItems] = useState([]);
- 
+    
     const findSubtotal=()=>{
           const total= cartItems.reduce((sum,item)=>{
             return sum+item.quantity*item.price
@@ -104,7 +105,8 @@ const Billing = () => {
                 </div>
                 <div className='flex justify-evenly'>
                   <div className='border-2 px-20 py-0.5 rounded-md'>Clear Cart</div>
-                  <div className='border-2 px-20 py-0.5 rounded-md text-white bg-green-800'>Generate Bill</div>
+                  <button className='cursor-pointer border-2 px-20 py-0.5 rounded-md text-white bg-green-800'
+                  onClick={()=>generateBillPDF(cartItems,findSubtotal())}>Generate Bill</button>
                 </div>
               </div>
             </div>
